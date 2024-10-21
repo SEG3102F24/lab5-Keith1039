@@ -1,7 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {EmployeeService} from "../service/employee.service";
 import { RouterLink } from '@angular/router';
 import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
+import { Observable } from 'rxjs';
+import { Employee } from '../model/employee';
 
 @Component({
     selector: 'app-employees',
@@ -10,6 +12,11 @@ import { NgFor, AsyncPipe, DatePipe } from '@angular/common';
     standalone: true,
     imports: [RouterLink, NgFor, AsyncPipe, DatePipe]
 })
-export class EmployeesComponent {
-  protected employees: EmployeeService = inject(EmployeeService);
+export class EmployeesComponent implements OnInit {
+  protected employees!: Observable<Employee[]>;
+  private employeeService = inject(EmployeeService);
+  
+  ngOnInit(){
+    this.employees = this.employeeService.getEmployees()
+  }
 }
